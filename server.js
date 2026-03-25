@@ -1,3 +1,4 @@
+console.log("API KEY EXISTS:", !!process.env.OPENAI_API_KEY);
 import express from "express";
 import cors from "cors";
 import OpenAI from "openai";
