@@ -8,6 +8,10 @@ const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+app.get("/chat", (req, res) => {
+  res.send("chat endpoint is working");
+});
+
 app.post("/chat", async (req, res) => {
   try {
     const message = req.body.message;
