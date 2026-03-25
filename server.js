@@ -37,10 +37,10 @@ app.post("/chat", async (req, res) => {
 
     res.json({ reply });
 
-  } catch (err) {
-    console.error("ERROR:", err);
-    res.json({ reply: "error" });
-  }
+  catch (err) {
+  console.error("FULL ERROR:", err);
+  res.json({ reply: err.message || "error" });
+}
 });
 
 app.listen(3000, () => {
