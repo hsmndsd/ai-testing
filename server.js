@@ -1,10 +1,7 @@
-console.log("API KEY EXISTS:", !!process.env.OPENAI_API_KEY);
 import express from "express";
-import cors from "cors";
 import OpenAI from "openai";
 
 const app = express();
-app.use(cors());
 app.use(express.json());
 
 const client = new OpenAI({
@@ -13,36 +10,25 @@ const client = new OpenAI({
 
 app.post("/chat", async (req, res) => {
   try {
-    console.log("Incoming request:", req.body);
+    const message = req.body.message;
 
-    const { message } = req.body;
-
-    const completion = await client.chat.completions.create({
+    const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        {
-          role: "system",
-          content: "You are a casual Roblox player. Keep responses short."
-        },
-        {
-          role: "user",
-          content: message
-        }
+        { role: "system", content: "You are a casual Roblox player." },
+        { role: "user", content: message }
       ]
     });
 
-    const reply = completion.choices[0].message.content;
+    res.json({
+      reply: response.choices[0].message.content
+    });
 
-    console.log("AI reply:", reply);
-
-    res.json({ reply });
-
-  catch (err) {
-  console.error("FULL ERROR:", err);
-  res.json({ reply: err.message || "error" });
-}
+  } catch (err) {
+    console.error(err);
+    res.json({ reply: "error" });
+  }
 });
 
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
-});
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log("running"));
