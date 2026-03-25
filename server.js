@@ -12,6 +12,8 @@ const client = new OpenAI({
 
 app.post("/chat", async (req, res) => {
   try {
+    console.log("Incoming request:", req.body);
+
     const { message } = req.body;
 
     const completion = await client.chat.completions.create({
@@ -19,7 +21,7 @@ app.post("/chat", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "You are a casual Roblox player. Keep responses short, natural, and conversational."
+          content: "You are a casual Roblox player. Keep responses short."
         },
         {
           role: "user",
@@ -28,11 +30,15 @@ app.post("/chat", async (req, res) => {
       ]
     });
 
-    res.json({
-      reply: completion.choices[0].message.content
-    });
+    const reply = completion.choices[0].message.content;
+
+    console.log("AI reply:", reply);
+
+    res.json({ reply });
+
   } catch (err) {
-    res.status(500).json({ reply: "error" });
+    console.error("ERROR:", err);
+    res.json({ reply: "error" });
   }
 });
 
