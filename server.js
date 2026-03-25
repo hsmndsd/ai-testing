@@ -29,8 +29,8 @@ app.post("/chat", async (req, res) => {
     });
 
   } catch (err) {
-    console.error(err);
-    res.json({ reply: "error" });
+    console.error("ERROR:", err); // shows in Render logs
+    res.json({ reply: err.message || "error" }); // sends real error to curl
   }
 });
 
